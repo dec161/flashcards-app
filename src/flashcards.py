@@ -33,8 +33,7 @@ class Flashcard:
 
 
 class IFlashcardSource(Protocol):
-    def next(self):
-        pass
+    def next(self): pass
 
     @property
     def current_word(self): pass
