@@ -31,6 +31,10 @@ class Flashcard:
     def inc_wrong(self):
         self.__wrong += 1
 
+    @property
+    def wc_ratio(self):
+        return (self.wrong + 1) / (self.correct + 1)
+
 
 class IFlashcardSource(Protocol):
     def next(self): pass
@@ -70,13 +74,23 @@ class WeightedFlashcardList:
         self.__total_correct = 0
         self.__total_wrong = 0
 
+        self.__total_ratio_cache = None
+
         for card in self.__flashcards.values():
             self.__total_correct += card.correct
             self.__total_wrong += card.wrong
 
+    @property
+    def __total_wc_ratio(self):
+        if not self.__total_ratio_cache:
+            self.__total_ratio_cache = sum([card.wc_ratio for card in self.__flashcards.values()])
+        return self.__total_ratio_cache
+
+    def __calculate_probability(self, card):
+        return card.wc_ratio / self.__total_wc_ratio
+
     def next(self):
-        probability_dist = [(card.wrong + 1) / (self.__total_wrong + len(self.__flashcards))
-                            for card in self.__flashcards.values()]
+        probability_dist = [self.__calculate_probability(card) for card in self.__flashcards.values()]
         self.__current = self.__rng.choice(list(self.__flashcards.keys()), p=probability_dist)
 
     @property
@@ -93,10 +107,12 @@ class WeightedFlashcardList:
     def correct_answer(self):
         self.__flashcards[self.current_word].inc_correct()
         self.__total_correct += 1
+        self.__total_ratio_cache = None
 
     def wrong_answer(self):
         self.__flashcards[self.current_word].inc_wrong()
         self.__total_wrong += 1
+        self.__total_ratio_cache = None
 
     @property
     def total_correct(self):
