@@ -3,6 +3,7 @@ from tkinter import ttk, messagebox
 
 from src.flashcards import IFlashcardSource
 
+
 class FlashcardGUI:
     def __init__(self, root, flashcard_source: IFlashcardSource):
         self.__flashcard_source = flashcard_source
