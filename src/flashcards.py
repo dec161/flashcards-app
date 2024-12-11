@@ -35,6 +35,10 @@ class Flashcard:
     def wc_ratio(self):
         return (self.wrong + 1) / (self.correct + 1)
 
+    def reset(self):
+        self.__correct = 0
+        self.__wrong = 0
+
 
 class IFlashcardSource(Protocol):
     def next(self): pass
@@ -48,6 +52,8 @@ class IFlashcardSource(Protocol):
     def correct_answer(self): pass
 
     def wrong_answer(self): pass
+
+    def reset_answers(self): pass
 
     @property
     def total_correct(self) -> int: pass
@@ -121,3 +127,7 @@ class WeightedFlashcardList:
     @property
     def total_wrong(self):
         return self.__total_wrong
+
+    def reset_answers(self):
+        for card in self.__flashcards.values():
+            card.reset()
