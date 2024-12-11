@@ -12,7 +12,8 @@ class FlashcardGUI:
 
         ttk.Label(self.__root, text="Угадалка от нас", font=("Arial", 24, "bold"), anchor="center").pack(pady=20)
 
-        self.__word_label = ttk.Label(self.__root, text="", font=("Arial", 30, "bold"), anchor="center")
+        self.__word = tk.StringVar()
+        self.__word_label = ttk.Label(self.__root, textvariable=self.__word, font=("Arial", 30, "bold"), anchor="center")
         self.__word_label.pack(pady=10)
 
         self.__entry = ttk.Entry(self.__root, font=("Arial", 16), justify="center")
@@ -31,14 +32,10 @@ class FlashcardGUI:
         self.__stats_label = ttk.Label(self.__root, textvariable=self.__stats, font=("Arial", 14))
         self.__stats_label.pack(pady=10)
 
-    def __update_word_display(self, word):
-        self.__word_label.config(text=word)
-        self.__entry.delete(0, tk.END)
-        self.__message_label.config(text="")
-
     def __show_word(self):
         self.__flashcard_source.next()
-        self.__update_word_display(self.__flashcard_source.current_word)
+        self.__word.set(self.__flashcard_source.current_word)
+        self.__entry.delete(0, tk.END)
 
     def __check_translation(self):
         if not self.__flashcard_source.current_word:
@@ -55,6 +52,7 @@ class FlashcardGUI:
         self.__message_label.config(text="Правильно!", foreground="green")
         self.__flashcard_source.correct_answer()
         self.__update_stats()
+        self.__show_word()
 
     def __wrong_answer(self):
         self.__message_label.config(
