@@ -27,17 +27,18 @@ class FlashcardGUI:
         self.__message_label = ttk.Label(self.__root, text="", font=("Arial", 16), anchor="center")
         self.__message_label.pack(pady=10)
 
-        self.__stats_label = ttk.Label(self.__root, text="Правильно: 0 | Неправильно: 0", font=("Arial", 14))
+        self.__stats = tk.StringVar(value="Правильно: 0 | Неправильно: 0")
+        self.__stats_label = ttk.Label(self.__root, textvariable=self.__stats, font=("Arial", 14))
         self.__stats_label.pack(pady=10)
 
-    def __update_word_label(self, word):
+    def __update_word_display(self, word):
         self.__word_label.config(text=word)
         self.__entry.delete(0, tk.END)
         self.__message_label.config(text="")
 
     def __show_word(self):
         self.__flashcard_source.next()
-        self.__update_word_label(self.__flashcard_source.current_word)
+        self.__update_word_display(self.__flashcard_source.current_word)
 
     def __check_translation(self):
         if not self.__flashcard_source.current_word:
@@ -66,6 +67,4 @@ class FlashcardGUI:
     def __update_stats(self):
         """Обновляет статистику."""
 
-        self.__stats_label.config(
-            text=f"Правильно: {self.__flashcard_source.total_correct} | Неправильно: {self.__flashcard_source.total_wrong}"
-        )
+        self.__stats.set(f"Правильно: {self.__flashcard_source.total_correct} | Неправильно: {self.__flashcard_source.total_wrong}")
