@@ -78,7 +78,7 @@ class TestWeightedFlashcardList(unittest.TestCase):
         result = self.flashcards.try_add_flashcard(new_card)
         
         self.assertTrue(result)
-        self.assertEqual(self.flashcards.total_correct, 0)
+        self.assertIn(new_card, self.flashcards._WeightedFlashcardList__flashcards.values())  # noqa
 
     def test_save_progress(self):
         self.flashcards.next()
