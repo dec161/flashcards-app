@@ -6,6 +6,7 @@ from googletrans import Translator as GoogleTranslator
 
 from gui.flashcards import FlashcardGUI
 from gui.translator import TranslatorGUI
+from gui.testmode import TestModeGUI
 from flashcards import WeightedFlashcardList
 from translator import Translator
 
@@ -32,7 +33,7 @@ def main():
         }
     )
     flashcards_frame = tk.Frame(root, bg="#2e2e2e")
-    FlashcardGUI(flashcards_frame, flashcard_source)
+    flashcard_gui = FlashcardGUI(flashcards_frame, flashcard_source)
     flashcards_frame.pack(fill=tk.BOTH, expand=True)
 
     translator_window = tk.Toplevel(root, bg="#2e2e2e")
@@ -43,7 +44,22 @@ def main():
     open_translator = ttk.Button(root, text="Открыть переводчик", command=translator_window.deiconify)
     open_translator.pack(expand=True)
 
-    # TODO: добавить режим теста и график
+    def start_test():
+        open_translator["state"] = "disabled"
+        translator_window.withdraw()
+        flashcard_gui.show_word()
+        flashcard_gui.reset_answers()
+
+    def end_test():
+        open_translator["state"] = "normal"
+        flashcard_gui.clear_word()
+        flashcard_gui.save_progress()
+
+    TestModeGUI(
+        root,
+        start_test,
+        end_test
+    )
 
     root.mainloop()
 

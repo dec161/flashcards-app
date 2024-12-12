@@ -62,6 +62,8 @@ class WeightedFlashcardList:
             self.__total_correct += card.correct
             self.__total_wrong += card.wrong
 
+        self.__progress = []
+
     @property
     def __total_wc_ratio(self):
         if not self.__total_ratio_cache:
@@ -107,3 +109,13 @@ class WeightedFlashcardList:
     def reset_answers(self):
         for card in self.__flashcards.values():
             card.reset()
+
+    def clear_word(self):
+        self.__current = None
+
+    def save_progress(self):
+        self.__progress.append({"correct": self.total_correct, "wrong": self.total_wrong})
+
+    @property
+    def progress(self):
+        return self.__progress
