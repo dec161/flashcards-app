@@ -119,3 +119,10 @@ class WeightedFlashcardList:
     @property
     def progress(self):
         return self.__progress
+
+    def try_add_flashcard(self, flashcard):
+        if self.__flashcards.get(flashcard.word):
+            return False
+
+        self.__flashcards[flashcard.word] = flashcard
+        return True

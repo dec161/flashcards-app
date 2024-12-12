@@ -3,6 +3,8 @@ from tkinter import ttk, messagebox
 from typing import Protocol, Iterable
 import matplotlib.pyplot as plt
 
+from src.flashcards import Flashcard
+
 
 class IFlashcardSource(Protocol):
     def next(self): pass
@@ -31,6 +33,41 @@ class IFlashcardSource(Protocol):
 
     @property
     def total_wrong(self) -> int: pass
+
+    def try_add_flashcard(self, flashcard): pass
+
+
+class AddWordGUI:
+    def __init__(self, root, flashcard_source: IFlashcardSource):
+        self.__root = root
+
+        self.__flashcard_source = flashcard_source
+
+        tk.Label(self.__root, text="Слово на английском:").pack(pady=10)
+        self.__word_entry = tk.Entry(self.__root, font=("Arial", 14))
+        self.__word_entry.pack(pady=5)
+
+        tk.Label(self.__root, text="Перевод:").pack(pady=10)
+        self.__translation_entry = tk.Entry(self.__root, font=("Arial", 14))
+        self.__translation_entry.pack(pady=5)
+
+        self.__save_button = tk.Button(self.__root, text="Сохранить", command=self.__try_save_word)
+        self.__save_button.pack(pady=5)
+
+    def __try_save_word(self):
+        word = self.__word_entry.get().strip()
+        translation = self.__translation_entry.get().strip()
+
+        if not word or not translation:
+            messagebox.showerror("Ошибка", "Заполните оба поля")
+            return
+
+        if not self.__flashcard_source.try_add_flashcard(Flashcard(word, translation)):
+            messagebox.showerror("Ошибка", f"Слово '{word}' уже есть в словаре")
+            return
+
+        messagebox.showinfo("Успех", f"Слово '{word}' добавлено в словарь")
+        self.__root.destroy()
 
 
 class FlashcardGUI:
@@ -62,7 +99,17 @@ class FlashcardGUI:
         self.__stats_label.pack(pady=10)
 
         self.__show_progress_button = ttk.Button(self.__root, text="Посмотреть прогресс", command=self.__show_progress)
-        self.__show_progress_button.pack()
+        self.__show_progress_button.pack(pady=5)
+
+        self.__add_word_button = ttk.Button(self.__root, text="Добавить новое слово", command=self.__add_word)
+        self.__add_word_button.pack(pady=5)
+
+    def __add_word(self):
+        add_window = tk.Toplevel(self.__root)
+        add_window.title("Добавить слово")
+        add_window.geometry("300x200")
+
+        AddWordGUI(add_window, self.__flashcard_source)
 
     def show_word(self):
         self.__flashcard_source.next()
