@@ -1,7 +1,22 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from typing import Protocol
 
-from src.translator import ITranslator
+
+class ITranslator(Protocol):
+    def translate(self, text) -> str: pass
+
+    @property
+    def src(self) -> str: pass
+
+    @src.setter
+    def src(self, value): pass
+
+    @property
+    def dst(self) -> str: pass
+
+    @dst.setter
+    def dst(self, value): pass
 
 
 class TranslatorGUI:

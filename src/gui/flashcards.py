@@ -1,7 +1,30 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from typing import Protocol
 
-from src.flashcards import IFlashcardSource
+
+class IFlashcardSource(Protocol):
+    def next(self): pass
+
+    @property
+    def current_word(self): pass
+
+    @property
+    def current_translation(self): pass
+
+    def correct_answer(self): pass
+
+    def wrong_answer(self): pass
+
+    def reset_answers(self): pass
+
+    def clear_word(self): pass
+
+    @property
+    def total_correct(self) -> int: pass
+
+    @property
+    def total_wrong(self) -> int: pass
 
 
 class FlashcardGUI:
