@@ -7,8 +7,8 @@ from googletrans import Translator as GoogleTranslator
 from gui.flashcards import FlashcardGUI
 from gui.translator import TranslatorGUI
 from gui.testmode import TestModeGUI
-from flashcards import WeightedFlashcardList
-from translator import Translator
+from classes.flashcards import WeightedFlashcardList
+from classes.translator import Translator
 
 
 def main():

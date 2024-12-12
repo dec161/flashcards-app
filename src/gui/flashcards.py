@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 from typing import Protocol, Iterable
 import matplotlib.pyplot as plt
 
-from src.flashcards import Flashcard
+from src.classes.flashcards import Flashcard
 
 
 class IFlashcardSource(Protocol):
