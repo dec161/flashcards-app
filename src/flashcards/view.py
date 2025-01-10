@@ -41,7 +41,7 @@ class FlashcardsView(tk.Frame):
         self._title_label = ttk.Label(self, text="Угадалка от нас", font=("Arial", 24, "bold"), anchor="center")
         self._title_label.pack(pady=20, expand=True)
 
-        self._word_label = ttk.Label(self, text="test", font=("Arial", 30, "bold"), anchor="center")
+        self._word_label = ttk.Label(self, font=("Arial", 30, "bold"), anchor="center")
         self._word_label.pack(pady=10, expand=True)
 
         self._timer = Timer(30, font=("Arial", 16), master=self)
