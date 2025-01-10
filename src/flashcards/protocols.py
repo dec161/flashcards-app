@@ -22,15 +22,11 @@ class IFlashcardsModel(Protocol):
 
     def reset_answers(self) -> None: pass
 
-    # def clear_word(self) -> None: pass
-
     def save_progress(self) -> None: pass
 
     def get_correct(self) -> Iterable: pass
 
     def get_incorrect(self) -> Iterable: pass
-
-    # def try_add_flashcard(self, flashcard) -> None: pass
 
 
 class IFlashcardsPresenter(Protocol):
